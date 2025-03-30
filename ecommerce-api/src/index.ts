@@ -24,8 +24,6 @@ app.use('/order-items', orderItemRouter)
 app.use('/stripe', stripeRouter)
 
 
-
-
 // Attempt to connect to the database
 connectDB()
 // Start Express server

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useCustomer } from "../hooks/useCustomer";
 import { useCartContext } from "../contexts/CartContext";
 import classes from "./Pages.module.css";
@@ -9,21 +9,31 @@ export const Cartpage = () => {
   const { handleShowOneCustomerEmail, handleCreateCustomer } = useCustomer();
   const { handleStripeHosted, loading, error } = useStripeHosted();
 
-  const [customer, setCustomer] = useState({
-    id: 1,
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    street_address: "",
-    postal_code: "",
-    city: "",
-    country: "",
-    password: "",
-  });
+  const getStoredCustomer = () => {
+    const savedCustomer = localStorage.getItem("customerData");
+    return savedCustomer
+      ? JSON.parse(savedCustomer)
+      : {
+          id: 1,
+          firstname: "",
+          lastname: "",
+          email: "",
+          phone: "",
+          street_address: "",
+          postal_code: "",
+          city: "",
+          country: "",
+          password: "",
+        };
+  };
 
+  const [customer, setCustomer] = useState(getStoredCustomer);
   const [needsPassword, setNeedsPassword] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("customerData", JSON.stringify(customer));
+  }, [customer]);
 
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
@@ -35,7 +45,7 @@ export const Cartpage = () => {
     const existingCustomer = await handleShowOneCustomerEmail(email);
     setNeedsPassword(!existingCustomer);
     setEmailChecked(true);
-    return existingCustomer; // Return the existing customer data
+    return existingCustomer;
 };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -182,6 +192,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="First Name"
               required
+              value={customer.firstname}
               onChange={(e) =>
                 setCustomer({ ...customer, firstname: e.target.value })
               }
@@ -190,6 +201,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="Last Name"
               required
+              value={customer.lastname}
               onChange={(e) =>
                 setCustomer({ ...customer, lastname: e.target.value })
               }
@@ -198,6 +210,7 @@ export const Cartpage = () => {
               type="email"
               placeholder="Email"
               required
+              value={customer.email}
               onBlur={(e) => checkCustomerExists(e.target.value)}
               onChange={(e) =>
                 setCustomer({ ...customer, email: e.target.value })
@@ -223,6 +236,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="Phone Number"
               required
+              value={customer.phone}
               onChange={(e) =>
                 setCustomer({ ...customer, phone: e.target.value })
               }
@@ -231,6 +245,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="Street Address"
               required
+              value={customer.street_address}
               onChange={(e) =>
                 setCustomer({ ...customer, street_address: e.target.value })
               }
@@ -239,6 +254,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="Postal Code"
               required
+              value={customer.postal_code}
               onChange={(e) =>
                 setCustomer({ ...customer, postal_code: e.target.value })
               }
@@ -247,6 +263,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="City"
               required
+              value={customer.city}
               onChange={(e) =>
                 setCustomer({ ...customer, city: e.target.value })
               }
@@ -255,6 +272,7 @@ export const Cartpage = () => {
               type="text"
               placeholder="Country"
               required
+              value={customer.country}
               onChange={(e) =>
                 setCustomer({ ...customer, country: e.target.value })
               }

@@ -45,12 +45,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ existingProduct, onClose, onP
     setError("");
     try {
       if (existingProduct) {
-        // Update the product
-        if (existingProduct.id) {
           await handleUpdateProduct(existingProduct.id, product);
-        }
       } else {
-        // Create product logic
+        // Create product logic if existingProduct is false... not sure what to do here
       }
       onProductUpdated();
       onClose();

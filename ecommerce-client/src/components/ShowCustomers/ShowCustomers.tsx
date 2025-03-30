@@ -9,7 +9,7 @@ const ShowCustomers = () => {
     const [customers, setCustomers] = useState<ICustomers[]>([]);
     const [editingCustomer, setEditingCustomer] = useState<ICustomers | null>(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [isContentVisible, setIsContentVisible] = useState(true); // Track visibility of content
+    const [isContentVisible, setIsContentVisible] = useState(true); 
 
     useEffect(() => {
         const fetchCustomers = async () => {
@@ -57,7 +57,6 @@ const ShowCustomers = () => {
                 <span className={`${classes.arrow} ${isContentVisible ? classes.down : classes.right}`}>&#9662;</span>
             </h2>
 
-            {/* Apply 'hidden' class when the content is not visible */}
             <div className={`${isContentVisible ? classes.customerContainer : classes.hidden}`}>
                 <button className={`${classes.editButton}`} onClick={openCreateCustomerModal}>
                     Add Customer

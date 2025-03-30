@@ -1,7 +1,6 @@
 import api from "../api/axios";
 import { IOrder } from "../models/IOrder";
 
-// Fetch all orders
 export async function getOrders() {
     try {
         const response = await api.get("/orders");
@@ -12,7 +11,6 @@ export async function getOrders() {
     }
 }
 
-// Fetch a specific order by ID
 export async function getOneOrder({ id }: { id: number }): Promise<IOrder> {
     try {
         const response = await api.get(`/orders/${id}`);
@@ -23,11 +21,9 @@ export async function getOneOrder({ id }: { id: number }): Promise<IOrder> {
     }
 }
 
-// Create a new order
 export async function createOrder(orderData: Omit<IOrder, "id" | "created_at">) {
     try {
         const response = await api.post("/orders", orderData);
-        console.log("Order created successfully.", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to create an order.", error);
@@ -35,7 +31,6 @@ export async function createOrder(orderData: Omit<IOrder, "id" | "created_at">) 
     }
 }
 
-// Update an existing order
 export const updateOrder = async (updatedOrder: Partial<IOrder>) => {
     try {
         const response = await api.patch(`/orders/${updatedOrder.id}`, updatedOrder);
@@ -46,11 +41,9 @@ export const updateOrder = async (updatedOrder: Partial<IOrder>) => {
     }
 };
 
-// Delete an order
 export async function deleteOrder({ id }: { id: number }) {
     try {
         const response = await api.delete(`/orders/${id}`);
-        console.log("Order deleted successfully.", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to delete the order.", error);

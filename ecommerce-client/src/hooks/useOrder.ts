@@ -6,11 +6,10 @@ export const useOrder = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Handle creating an order
   const handleCreateOrder = async (orderPayload: Omit<IOrder, 'id' | 'created_at'>) => {
     try {
       setLoading(true);
-      const result = await createOrder(orderPayload); // Passing the payload without id and created_at
+      const result = await createOrder(orderPayload); 
       setLoading(false);
       return result;
     } catch (err) {
@@ -19,14 +18,13 @@ export const useOrder = () => {
     }
   };
 
-  // Handle updating an order
   const handleUpdateOrder = async (
     orderId: number,
     orderPayload: Omit<IOrder, 'id' | 'created_at' | 'customer_id' | 'total_price' | 'order_items'>
   ) => {
     try {
       setLoading(true);
-      const result = await updateOrder({ id: orderId, ...orderPayload }); // Merge id with payload
+      const result = await updateOrder({ id: orderId, ...orderPayload });
       setLoading(false);
       return result;
     } catch (err) {
@@ -35,7 +33,6 @@ export const useOrder = () => {
     }
   };
 
-  // Handle deleting an order
   const handleDeleteOrder = async (orderId: number) => {
     try {
       setLoading(true);
@@ -60,11 +57,10 @@ export const useOrder = () => {
     }
   }
 
-  // Handle fetching all orders
   const handleShowOrders = async () => {
     try {
       setLoading(true);
-      const orders = await getOrders(); // Fetch all orders
+      const orders = await getOrders();
       setLoading(false);
       return orders;
     } catch (err) {

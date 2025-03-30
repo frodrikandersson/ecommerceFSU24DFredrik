@@ -4,15 +4,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Darkened background effect */
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    transition: background 0.3s ease-in-out; /* Smooth transition for background dimming */
+    transition: background 0.3s ease-in-out; 
 }
 
-/* 🔹 Modal Content */
+/* Modal Content */
 .modalContent {
     background: #fff;
     padding: 30px;
@@ -23,8 +23,8 @@
     text-align: center;
     position: relative;
     animation: fadeIn 0.3s ease-in-out;
-    max-height: 80vh; /* Set a max height to make scrolling possible */
-    overflow-y: auto; /* Enable vertical scrolling when content exceeds the max height */
+    max-height: 80vh; 
+    overflow-y: auto; 
 }
 
 .modalContent::-webkit-scrollbar {
@@ -45,7 +45,7 @@
     to { opacity: 1; transform: scale(1); }
 }
 
-/* 🔹 Form Styling */
+/* Form Styling */
 .form {
     display: flex;
     flex-direction: column;
@@ -77,14 +77,14 @@
     outline: none;
 }
 
-/* 🔹 Button Group */
+/* Button Group */
 .buttonGroup {
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
 }
 
-/* 🔹 Buttons */
+/* Buttons */
 .submitButton {
     background-color: #007bff;
     color: white;
@@ -111,7 +111,7 @@
     background: darkred;
 }
 
-/* 🔹 Error Message */
+/* Error Message */
 .error {
     color: red;
     font-weight: bold;

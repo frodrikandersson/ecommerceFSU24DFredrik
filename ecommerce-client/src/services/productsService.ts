@@ -1,7 +1,6 @@
 import api from "../api/axios";
-import { IProducts } from "../models/IProducts"; // Assuming IProduct exists
+import { IProducts } from "../models/IProducts"; 
 
-// Fetch all products
 export async function getProducts() {
     try {
         const response = await api.get("/products");
@@ -12,7 +11,6 @@ export async function getProducts() {
     }
 }
 
-// Fetch a specific product by ID
 export async function getOneProduct({ id }: { id: number }): Promise<IProducts> {
     try {
         const response = await api.get(`/products/${id}`);
@@ -23,11 +21,9 @@ export async function getOneProduct({ id }: { id: number }): Promise<IProducts> 
     }
 }
 
-// Create a new product
 export async function createProduct(productData: Omit<IProducts, "id" | "created_at">) {
     try {
         const response = await api.post("/products", productData);
-        console.log("Product created successfully.", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to create a product.", error);
@@ -35,11 +31,9 @@ export async function createProduct(productData: Omit<IProducts, "id" | "created
     }
 }
 
-// Update an existing product
 export async function updateProduct({ id, productData }: { id: number, productData: Omit<IProducts, "id" | "created_at"> }) {
     try {
         const response = await api.patch(`/products/${id}`, productData);
-        console.log("Product updated successfully.", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to update the product.", error);
@@ -47,11 +41,9 @@ export async function updateProduct({ id, productData }: { id: number, productDa
     }
 }
 
-// Delete a product
 export async function deleteProduct({ id }: { id: number }) {
     try {
         const response = await api.delete(`/products/${id}`);
-        console.log("Product deleted successfully.", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to delete the product.", error);

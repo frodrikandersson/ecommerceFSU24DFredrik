@@ -1,10 +1,10 @@
-/* 🔹 Main Container */
+/* Main Container */
 .container {
     padding: 20px;
     text-align: center;
 }
 
-/* 🔹 Clickable Title with Arrow */
+/* Clickable Title with Arrow */
 .title {
     cursor: pointer;
     display: flex;
@@ -39,7 +39,7 @@
     transform: rotate(-90deg);
 }
 
-/* 🔹 Order List Expand/Collapse Effect */
+/* Order List Expand/Collapse Effect */
 .orderContainer {
     max-height: 1000px;
     overflow: hidden;
@@ -57,7 +57,7 @@
     display: none;
 }
 
-/* 🔹 Order Grid */
+/* Order Grid */
 .orderGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -65,7 +65,7 @@
     margin-top: 20px;
 }
 
-/* 🔹 Individual Order Card */
+/* Individual Order Card */
 .orderCard {
     background: white;
     padding: 15px;
@@ -79,7 +79,7 @@
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* 🔹 Button Group */
+/* Button Group */
 .buttonGroup {
     display: flex;
     gap: 12px;
@@ -87,7 +87,7 @@
     justify-content: center;
 }
 
-/* 🔹 Buttons */
+/* Buttons */
 .editButton {
     background-color: #007bff;
     color: white;
@@ -120,7 +120,7 @@
     transform: scale(1.05);
 }
 
-/* 🔹 Modal Styling */
+/* Modal Styling */
 .modalOverlay {
     position: fixed;
     top: 0;
