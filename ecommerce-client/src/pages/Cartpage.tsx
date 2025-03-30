@@ -52,7 +52,11 @@ export const Cartpage = () => {
       if (existingCustomer) {
         customerDataForStripe = {
           id: existingCustomer.id,
-          email: existingCustomer.email, 
+          email: existingCustomer.email,
+          street_address: existingCustomer.street_address,
+          postal_code: existingCustomer.postal_code,
+          city: existingCustomer.city,
+          country: existingCustomer.country, 
         };
       } else {
         if (!customer.password) {
@@ -75,12 +79,21 @@ export const Cartpage = () => {
           id: customerPayload.id,
           email: customerPayload.email, 
         };
+
+        try {
+          await handleCreateCustomer(customerPayload);
+        } catch (error) {
+          console.error("Error creating customer:", error);
+          return;
+        }
       }
-  
+
+      
       const lineItems = cart.map((item) => ({
         price_data: {
           currency: "SEK",
           product_data: {
+            id: item.product.id,
             name: item.product.name,
             description: item.product.description,
             images: [item.product.image],
@@ -90,6 +103,7 @@ export const Cartpage = () => {
         quantity: item.quantity,
       }));
   
+
       try {
         await handleStripeHosted(lineItems, customerDataForStripe);
       } catch (err) {

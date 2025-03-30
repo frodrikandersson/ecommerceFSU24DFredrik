@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
 import { useOrder } from "../hooks/useOrder";
 import { useStripeHosted } from "../hooks/useStripe";
+import { IStripeLineItem, IStripeLineItems, IStripeProduct, IStripeProducts, IStripeSession } from "../models/IStripe";
 
 export const Successpage = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -17,31 +17,39 @@ export const Successpage = () => {
     const sessionId = new URLSearchParams(window.location.search).get("session_id");
 
     if (sessionId) {
-      handleFetchStripeSession(sessionId).then(async (session) => {
+      handleFetchStripeSession(sessionId).then(async (StripeData) => {
+
+        const session: IStripeSession = StripeData.session;
+        const lineItems: IStripeLineItems = StripeData.lineItems;
+        const products: IStripeProducts = StripeData.products;
+
         if (session.payment_status === "paid") {
-          // Assuming session contains relevant order information like cart items, customer details, etc.
+          
+          const totalPrice = session.amount_total / 100;
+
           const orderDetails = {
-            customer_id: session.customer_id, // Ensure you get the correct customer ID from your session or database
+            customer_id: session.metadata.customer_id,
             payment_status: session.payment_status,
-            payment_id: session.payment_intent, // Stripe session ID
-            order_status: "processing", // Default to "processing"
-            order_items: session.line_items.data.map((item: any) => ({
-              product_id: item.price.product, // Ensure the correct product ID is retrieved
-              product_name: item.description,
-              quantity: item.quantity,
-              unit_price: item.price.unite_amount / 100, // Convert from cents to currency
+            order_status: "processing",
+            total_price: totalPrice,
+            payment_id: session.payment_intent,
+            order_items: lineItems.map((lineItem: IStripeLineItem, index: number) => ({
+              product_id: products[index]?.metadata.product_id,
+              product_name: products[index]?.name,
+              quantity: lineItem.quantity,
+              unit_price: lineItem.price.unit_amount / 100,
             })),
           };
 
           const result = await handleCreateOrder(orderDetails);
-          if(result) {
+          if(result.message == "Product created") {
             setOrderSuccess(true);
+            setLoading(false);
           } else {
             setError("Failed to create order");
           }
         } else {
-          setError("Jag hann inte med att skapa en order efter en betalning har gjorts..");
-          setLoading(false);
+          //else if (session.payment_status === "invoice")
         }
       });
     } else {
