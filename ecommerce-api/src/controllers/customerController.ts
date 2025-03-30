@@ -45,11 +45,9 @@ export const getCustomerByEmail = async (req: Request, res: Response) => {
 }
 
 export const createCustomer = async (req: Request, res: Response) => {
-  console.log("🔍 Incoming Request Body:", req.body); // Debug log
 
   const { firstname, lastname, email, password, phone, street_address, postal_code, city, country }: ICustomer = req.body;
   
-  // Ensure required fields exist
   if (!firstname || !lastname || !email || !password) {
     return res.status(400).json({ error: "Missing required fields!" });
   }
@@ -61,13 +59,12 @@ export const createCustomer = async (req: Request, res: Response) => {
     `;
     const params = [firstname, lastname, email, password, phone, street_address, postal_code, city, country];
 
-    console.log("🛠 Executing SQL:", sql, params); // Debug log
 
     await db.query<ResultSetHeader>(sql, params);
     res.status(201).json({ message: "✅ Customer created" });
 
   } catch (error: any) {
-    console.error("❌ Database Error:", error); // Show actual error message
+    console.error("❌ Database Error:", error); 
     res.status(500).json({ error: error.message || "Database error!" });
   }
 }

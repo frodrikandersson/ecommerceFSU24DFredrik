@@ -54,9 +54,7 @@ export const getOrderById = async (req: Request, res: Response) => {
       LEFT JOIN order_items ON orders.id = order_items.order_id
       WHERE orders.id = ?
     `;
-    const [rows] = await db.query<IOrder[]>(sql, [id])
-    // res.json(rows)
-    // return;
+    const [rows] = await db.query<IOrder[]>(sql, [id]);
 
     rows && rows.length > 0
       ? res.json(formatOrderDetails(id, rows))

@@ -3,7 +3,7 @@ import { IOrder } from "../../models/IOrder";
 import { useOrder } from "../../hooks/useOrder";
 import { useCustomer } from "../../hooks/useCustomer";
 import { useProducts } from "../../hooks/useProduct";
-import { useOrderItems } from "../../hooks/useOrderItem";  // import the hook for updating order items
+import { useOrderItems } from "../../hooks/useOrderItem"; 
 import classes from "./OrderForm.module.css";
 
 interface OrderFormProps {
@@ -16,7 +16,7 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
   const { handleCreateOrder, handleUpdateOrder, handleShowOneOrder, loading, error } = useOrder();
   const { handleShowCustomers } = useCustomer();
   const { handleShowProducts } = useProducts();
-  const { handleUpdateItems, handleDeleteItem } = useOrderItems(editingOrder?.id || 0);  // Initialize hook with the order ID if editing
+  const { handleUpdateItems, handleDeleteItem } = useOrderItems(editingOrder?.id || 0);  
   
   const [formData, setFormData] = useState<IOrder>({
     id: editingOrder?.id || null,
@@ -51,8 +51,7 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
       if (editingOrder && editingOrder.id) {
         try {
           const orderDetails = await handleShowOneOrder(editingOrder.id);
-          
-          // Ensure orderDetails is not undefined
+  
           if (orderDetails) {
             setFormData({
               id: orderDetails.id,
@@ -99,7 +98,7 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
           product_id: 0, 
           product_name: "", 
           quantity: 1, 
-          unit_price: 0, // Set the default unit price
+          unit_price: 0,
         },
       ],
     }));
@@ -116,7 +115,6 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
   };
 
   const handleProductSelect = (index: number, productId: number) => {
-    // Prevent product change during edit mode
     if (!editingOrder) {
       const selectedProduct = products.find((product) => product.id === productId);
       if (selectedProduct) {
@@ -125,7 +123,7 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
           ...updatedOrderItems[index],
           product_id: selectedProduct.id,
           product_name: selectedProduct.name,
-          unit_price: selectedProduct.price, // Ensure unit_price is set here
+          unit_price: selectedProduct.price, 
         };
         setFormData((prev) => ({ ...prev, order_items: updatedOrderItems }));
       }
@@ -133,20 +131,16 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
   };
 
   const handleQuantityChange = (index: number, newQuantity: number) => {
-    // Find the selected product from the products list
     const selectedProduct = products.find((product) => product.id === formData.order_items[index].product_id);
   
     if (selectedProduct) {
       const maxQuantity = selectedProduct.stock;
   
-      // Check if the new quantity is greater than the available stock
       if (newQuantity > maxQuantity) {
-        // Set the quantity to the maximum available stock
         alert(`You cannot order more than ${maxQuantity} items of this product.`);
         newQuantity = maxQuantity;
       }
   
-      // Update the quantity to the valid value (either the new value or the max stock value)
       const updatedOrderItems = [...formData.order_items];
       updatedOrderItems[index] = {
         ...updatedOrderItems[index],
@@ -160,19 +154,17 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
     e.preventDefault();
     try {
       if (formData.id) {
-        // Update order
         await handleUpdateOrder(formData.id, formData);
         
-        // Update order items
         const updatedItems = formData.order_items.map(item => ({
           id: item.id,
-          product_id: item.product_id, // Include product_id
-          product_name: item.product_name, // Include product_name
-          unit_price: item.unit_price, // Include unit_price
-          quantity: item.quantity, // Update quantity
+          product_id: item.product_id,
+          product_name: item.product_name, 
+          unit_price: item.unit_price,
+          quantity: item.quantity, 
         }));
         console.log(updatedItems);
-        await handleUpdateItems(updatedItems); // Update order items separately
+        await handleUpdateItems(updatedItems); 
   
         alert("Order updated successfully!");
       } else {
@@ -198,7 +190,7 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
           value={formData.customer_id || ""} 
           onChange={handleInputChange} 
           required 
-          disabled={editingOrder ? true : false} // Disable during edit mode
+          disabled={editingOrder ? true : false}
         >
           <option value="" disabled>Select a customer</option>
           {customers.map((customer) => (
@@ -234,11 +226,11 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
                 name="product_id" 
                 value={item.product_id || ""} 
                 onChange={(e) => {
-                  handleProductChange(index, e); // Keep this for handling product change
-                  handleProductSelect(index, Number(e.target.value)); // Update the product details
+                  handleProductChange(index, e); 
+                  handleProductSelect(index, Number(e.target.value)); 
                 }} 
                 required
-                disabled={editingOrder ? true : false} // Disable during edit mode
+                disabled={editingOrder ? true : false} 
               >
                 <option value="" disabled>Select a product</option>
                 {products.map((product) => (
@@ -254,8 +246,8 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
                 name="quantity" 
                 value={item.quantity} 
                 onChange={(e) => {
-                  handleProductChange(index, e); // Keep this for handling other product changes
-                  handleQuantityChange(index, Number(e.target.value)); // Check and handle the quantity update
+                  handleProductChange(index, e); 
+                  handleQuantityChange(index, Number(e.target.value)); 
                 }} 
                 required 
               />

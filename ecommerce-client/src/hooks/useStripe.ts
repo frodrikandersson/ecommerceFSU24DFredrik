@@ -17,7 +17,6 @@ export function useStripeHosted() {
       setError(null);
 
       const checkoutSession = await createStripeHosted(line_items, customer);
-      console.log("Stripe checkout session created successfully.", checkoutSession);
 
       if (checkoutSession?.checkout_url) {
         window.location.href = checkoutSession.checkout_url;
@@ -36,7 +35,6 @@ export function useStripeHosted() {
       setError(null);
 
       const session = await fetchStripeSession(sessionId);
-      console.log("Stripe session fetched successfully.", session);
       return session;
     } catch (error) {
       console.error("Failed to fetch Stripe session:", error);

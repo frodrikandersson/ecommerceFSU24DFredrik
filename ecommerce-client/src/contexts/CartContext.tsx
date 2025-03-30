@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { IProducts } from "../models/IProducts";
 import { CartItem } from "../models/ICart";
 
-// Define the context type
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: IProducts, quantity: number) => void;
@@ -12,22 +11,18 @@ interface CartContextType {
   getTotalItems: () => number;
 }
 
-// Create context with an empty default value
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// CartProvider component that provides the cart context
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => {
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
 
-  // Sync the cart with localStorage whenever it changes
   React.useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Add item to cart
   const addToCart = (product: IProducts, quantity: number) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.product.id === product.id);
@@ -45,12 +40,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  // Remove item from cart
   const removeFromCart = (productId: number) => {
     setCart((prevCart) => prevCart.filter((item) => item.product.id !== productId));
   };
 
-  // Update item quantity in cart
   const updateQuantity = (productId: number, quantity: number) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -59,12 +52,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  // Clear the cart
   const clearCart = () => {
     setCart([]);
   };
 
-  // Calculate total items in the cart
   const getTotalItems = () => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   };
@@ -76,7 +67,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook to use the cart context
 export const useCartContext = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {

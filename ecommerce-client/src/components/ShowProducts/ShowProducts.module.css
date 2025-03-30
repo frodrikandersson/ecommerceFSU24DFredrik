@@ -3,7 +3,7 @@
     text-align: center;
 }
 
-/* 🔹 Product List Expand/Collapse Effect */
+/* Product List Expand/Collapse Effect */
 .productContainer {
     max-height: 1000px;
     overflow: hidden;
@@ -17,7 +17,7 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 🔹 Clickable Title with Arrow */
+/* Clickable Title with Arrow */
 .title {
     cursor: pointer;
     display: flex;
@@ -38,7 +38,7 @@
     border-bottom-color: #999;
 }
 
-/* 🔹 Arrow */
+/* Arrow */
 .arrow {
     font-size: 1.8rem;
     font-weight: bold;
@@ -53,7 +53,7 @@
     transform: rotate(-90deg);
 }
 
-/* 🔹 Product Grid */
+/* Product Grid */
 .productGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -61,7 +61,7 @@
     margin-top: 20px;
 }
 
-/* 🔹 Individual Product Card */
+/* Individual Product Card */
 .productCard {
     background: white;
     padding: 15px;
@@ -75,7 +75,7 @@
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* 🔹 Product Image */
+/* Product Image */
 .productImage {
     width: 100%;
     height: 150px;
@@ -83,7 +83,7 @@
     border-radius: 5px;
 }
 
-/* 🔹 Button Group */
+/* Button Group */
 .buttonGroup {
     display: flex;
     gap: 12px;
@@ -91,7 +91,7 @@
     justify-content: center;
 }
 
-/* 🔹 Buttons */
+/* Buttons */
 .editButton {
     background-color: #007bff;
     color: white;
@@ -124,7 +124,7 @@
     transform: scale(1.05);
 }
 
-/* 🔹 Modal Styling */
+/* Modal Styling */
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -148,7 +148,7 @@
     position: relative;
 }
 
-/* 🔹 Close Button */
+/* Close Button */
 .closeButton {
     background: red;
     color: white;
@@ -163,9 +163,9 @@
 
 .buttonGroup {
     display: flex;
-    gap: 12px;  /* Ensures equal spacing between buttons */
+    gap: 12px;  
     justify-content: center;
-    margin-top: 15px; /* Ensure top margin aligns with button positioning */
+    margin-top: 15px;
 }
 
 .closeButton:hover {
@@ -176,13 +176,13 @@
 .addProductButton {
     background-color: #007bff;
     color: white;
-    padding: 10px 15px; /* Adjust padding to match Create Customer button */
+    padding: 10px 15px; 
     border: none;
     cursor: pointer;
     border-radius: 6px;
     font-size: 1rem;
     transition: background-color 0.3s, transform 0.2s;
-    margin-top: 15px; /* Ensure margin matches Create Customer button if necessary */
+    margin-top: 15px; 
 }
 
 .addProductButton:hover {
@@ -191,10 +191,10 @@
 }
 
 .hidden {
-    display: none;  /* or visibility: hidden; depending on your design */
+    display: none; 
 }
 
-/* 🔹 Animations */
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;

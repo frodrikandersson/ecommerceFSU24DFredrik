@@ -1,10 +1,10 @@
 import { NavLink, Outlet } from "react-router";
 import classes from "./Layout.module.css";
-import { useCartContext } from "../contexts/CartContext";  // Use the cart context
+import { useCartContext } from "../contexts/CartContext"; 
 
 export function Layout() {
   const { getTotalItems } = useCartContext();
-  const totalItems = getTotalItems(); // Get total items using the context
+  const totalItems = getTotalItems();
 
   return (
     <div className={classes.layoutWrapper}>

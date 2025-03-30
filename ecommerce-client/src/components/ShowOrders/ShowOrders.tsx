@@ -3,7 +3,7 @@ import { useOrder } from "../../hooks/useOrder";
 import { useCustomer } from "../../hooks/useCustomer";
 import { IOrder } from "../../models/IOrder";
 import { ICustomers } from "../../models/ICustomers";
-import OrderForm from "../OrderForm"; // Import OrderForm component
+import OrderForm from "../OrderForm"; 
 import classes from "./ShowOrders.module.css";
 
 const ShowOrders = () => {
@@ -17,14 +17,12 @@ const ShowOrders = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [editingOrder, setEditingOrder] = useState<IOrder | null>(null);
 
-    // Fetch orders and customers
     const fetchOrders = async () => {
         try {
             setLoading(true);
             const ordersData = await handleShowOrders();
             setOrders(ordersData);
 
-            // Fetch customer details for orders
             const updatedCustomers = new Map(customers);
             for (let order of ordersData) {
                 if (order.customer_id && !updatedCustomers.has(order.customer_id)) {
@@ -62,7 +60,7 @@ const ShowOrders = () => {
 
         try {
             await handleDeleteOrder(id);
-            fetchOrders(); // Refresh orders after deletion
+            fetchOrders(); 
         } catch (error) {
             console.error("Error deleting order:", error);
         }
@@ -90,14 +88,12 @@ const ShowOrders = () => {
             </h2>
 
 
-
-            {/* Render OrderForm when visible */}
             {isFormVisible && (
                 <div className={classes.modalOverlay}>
                     <OrderForm 
                         onClose={handleCloseForm} 
                         editingOrder={editingOrder} 
-                        refreshOrders={fetchOrders} // ✅ Pass function to refresh orders
+                        refreshOrders={fetchOrders} 
                     />
                 </div>
             )}

@@ -11,7 +11,6 @@ export const useCustomer = () => {
       setLoading(true);
       setError(null);
       const customers = await getCustomers();
-      // console.log("Customers fetched successfully.", customers);
       return customers;
     } catch (error) {
       setError("Failed to fetch customers.");
@@ -40,7 +39,6 @@ export const useCustomer = () => {
       setLoading(true);
       setError(null);
       const customer = await getOneCustomerEmail({ email });
-      console.log("Customer fetched successfully:", customer);
       return customer;
       
     } catch (error) {
@@ -56,7 +54,6 @@ export const useCustomer = () => {
       setLoading(true);
       setError(null);
       const createdCustomer = await createCustomer(customer);
-      console.log("Customer created successfully.", createdCustomer);
       return createdCustomer;
     } catch (error) {
       setError("Failed to create a customer.");
@@ -70,7 +67,6 @@ export const useCustomer = () => {
     setLoading(true);
     setError(null);
     const updatedCustomer = await updateCustomer({ id, customerData: customer });
-    console.log("Customer updated successfully.", updatedCustomer);
     return updatedCustomer;
     } catch (error) {
       setError("Failed to update the customer.");
@@ -84,7 +80,6 @@ export const useCustomer = () => {
       setLoading(true);
       setError(null);
       const deletedCustomer = await deleteCustomer({ id });
-      console.log("Customer deleted successfully.", deletedCustomer);
       return deletedCustomer;
     } catch (error) {
       setError("Failed to delete the customer.");
