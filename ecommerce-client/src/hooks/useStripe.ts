@@ -20,6 +20,7 @@ export function useStripeHosted() {
 
       if (checkoutSession?.checkout_url) {
         window.location.href = checkoutSession.checkout_url;
+        return checkoutSession;
       }
     } catch (error) {
       console.error("Failed to create a checkout session:", error);

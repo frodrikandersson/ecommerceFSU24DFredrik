@@ -13,12 +13,13 @@ export const Successpage = () => {
   const [purchasedItems, setPurchasedItems] = useState<any[]>([]);
   const [customerInfo, setCustomerInfo] = useState<any | null>(null);
   const navigate = useNavigate();
-  const { handleCreateOrder} = useOrder();
+  const { handleUpdateOrder, handleShowOneOrderByPaymentId } = useOrder();
   const { handleFetchStripeSession } = useStripeHosted();
   const { clearCart } = useCartContext();
 
 
   useEffect(() => {
+    localStorage.removeItem("customerData");
     const sessionId = new URLSearchParams(window.location.search).get("session_id");
 
     if (sessionId) {
@@ -29,21 +30,11 @@ export const Successpage = () => {
         const products: IStripeProducts = StripeData.products;
 
         if (session.payment_status === "paid") {
-          
-          const totalPrice = session.amount_total / 100;
 
           const orderDetails = {
-            customer_id: session.metadata.customer_id,
             payment_status: session.payment_status,
-            order_status: "processing",
-            total_price: totalPrice,
+            order_status: "Received",
             payment_id: session.payment_intent,
-            order_items: lineItems.map((lineItem: IStripeLineItem, index: number) => ({
-              product_id: products[index]?.metadata.product_id,
-              product_name: products[index]?.name,
-              quantity: lineItem.quantity,
-              unit_price: lineItem.price.unit_amount / 100,
-            })),
           };
 
           const purchasedItems = lineItems.map((lineItem: IStripeLineItem, index: number) => ({
@@ -67,8 +58,9 @@ export const Successpage = () => {
           };
           setCustomerInfo(customerData);
 
-          const result = await handleCreateOrder(orderDetails);
-          if(result.message == "Product created") {
+          const currentOrderInfo = await handleShowOneOrderByPaymentId(session.id);
+          const result = await handleUpdateOrder(currentOrderInfo.id , orderDetails );
+          if(result.message == "Order updated") {
             setOrderSuccess(true);
             setLoading(false);
 

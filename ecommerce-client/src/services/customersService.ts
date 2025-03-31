@@ -24,7 +24,6 @@ export async function getOneCustomer({ id }: { id?: string}): Promise<ICustomers
 
 export async function getOneCustomerEmail({email }: { email?: string }): Promise<ICustomers | null> {
     try {
-        console.log("get customer EMAIL", email)
         const response = await api.get(`/customers/email/${email}`);
         return response.data;
     } catch (error) {

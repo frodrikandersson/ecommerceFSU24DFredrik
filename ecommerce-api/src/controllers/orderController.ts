@@ -64,6 +64,36 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 }
 
+export const getOrderByPaymentId = async (req: Request, res: Response) => {
+  const paymentId: string = req.params.payment_id;
+
+  try {
+    
+    const sql = `
+      SELECT 
+        orders.id AS order_id, 
+        customers.id AS customer_id, 
+        orders.*, 
+        customers.*, 
+        order_items.* 
+      FROM orders 
+      LEFT JOIN customers ON orders.customer_id = customers.id
+      LEFT JOIN order_items ON orders.id = order_items.order_id
+      WHERE orders.payment_id = ?
+    `;
+
+    const [rows]: [any[], any] = await db.query(sql, [paymentId]);
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: 'Order not found for this payment_id' });
+    }
+
+    res.json(formatOrderDetails(rows[0].order_id, rows));
+  } catch (error) {
+    res.status(500).json({ error: logError(error) });
+  }
+};
+
 const formatOrderDetails = (orderId, rows) => ({
   id: orderId,
   customer_id: rows[0].customer_id,
@@ -111,7 +141,10 @@ export const createOrder = async (req: Request, res: Response) => {
       };
     }
 
-    res.status(201).json({message: 'Product created'})
+    res.status(201).json({
+      message: 'Product created',
+      order_id: result.insertId,      
+    })
   } catch(error: unknown) {
     res.status(500).json({error: logError(error)})
   }

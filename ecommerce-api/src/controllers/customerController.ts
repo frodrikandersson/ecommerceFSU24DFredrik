@@ -59,9 +59,14 @@ export const createCustomer = async (req: Request, res: Response) => {
     `;
     const params = [firstname, lastname, email, password, phone, street_address, postal_code, city, country];
 
-
-    await db.query<ResultSetHeader>(sql, params);
-    res.status(201).json({ message: "✅ Customer created" });
+    
+    const [result] = await db.query<ResultSetHeader>(sql, params) as [ResultSetHeader, any];
+    const customerId = result.insertId;
+    res.status(201).json({ 
+      message: "✅ Customer created",
+      customer: customerId,
+      email: email,
+    });
 
   } catch (error: any) {
     console.error("❌ Database Error:", error); 

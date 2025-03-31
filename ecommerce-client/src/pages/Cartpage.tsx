@@ -3,10 +3,12 @@ import { useCustomer } from "../hooks/useCustomer";
 import { useCartContext } from "../contexts/CartContext";
 import classes from "./Pages.module.css";
 import { useStripeHosted } from "../hooks/useStripe";
+import { useOrder } from "../hooks/useOrder";
 
 export const Cartpage = () => {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCartContext();
   const { handleShowOneCustomerEmail, handleCreateCustomer } = useCustomer();
+  const { handleCreateOrder, handleUpdateOrder } = useOrder();
   const { handleStripeHosted, loading, error } = useStripeHosted();
 
   const getStoredCustomer = () => {
@@ -27,6 +29,7 @@ export const Cartpage = () => {
         };
   };
 
+
   const [customer, setCustomer] = useState(getStoredCustomer);
   const [needsPassword, setNeedsPassword] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
@@ -43,10 +46,27 @@ export const Cartpage = () => {
   const checkCustomerExists = async (email: string) => {
     setEmailChecked(false);
     const existingCustomer = await handleShowOneCustomerEmail(email);
-    setNeedsPassword(!existingCustomer);
+  
+    if (existingCustomer) {
+      setCustomer((prev: any) => ({
+        ...prev,
+        id: existingCustomer.id,
+        firstname: existingCustomer.firstname,
+        lastname: existingCustomer.lastname,
+        phone: existingCustomer.phone,
+        street_address: existingCustomer.street_address,
+        postal_code: existingCustomer.postal_code,
+        city: existingCustomer.city,
+        country: existingCustomer.country,
+      }));
+      setNeedsPassword(false);
+    } else {
+      setNeedsPassword(true);
+    }
+  
     setEmailChecked(true);
     return existingCustomer;
-};
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -55,9 +75,10 @@ export const Cartpage = () => {
   
     let customerDataForStripe: any;
     let customerPayload: any;
+    let existingCustomer = null;
   
     if (customer.email) {
-      const existingCustomer = await checkCustomerExists(customer.email);
+      existingCustomer = await checkCustomerExists(customer.email);
   
       if (existingCustomer) {
         customerDataForStripe = {
@@ -85,13 +106,20 @@ export const Cartpage = () => {
           country: customer.country,
         };
         
-        customerDataForStripe = {
-          id: customerPayload.id,
-          email: customerPayload.email, 
-        };
-
         try {
-          await handleCreateCustomer(customerPayload);
+          const newCustomer = await handleCreateCustomer(customerPayload);
+          if (newCustomer) {
+            setCustomer((prev: any) => ({
+              ...prev,
+              id: newCustomer.id,
+              email: newCustomer.email,
+            }));
+  
+            customerDataForStripe = {
+              id: newCustomer.id,
+              email: newCustomer.email,
+            };
+          }
         } catch (error) {
           console.error("Error creating customer:", error);
           return;
@@ -112,13 +140,44 @@ export const Cartpage = () => {
         },
         quantity: item.quantity,
       }));
-  
+
+      const orderDetails = {
+        customer_id: customer?.id || existingCustomer?.id,
+        payment_status: "Unpaid",
+        order_status: "Pending",
+        total_price: totalPrice,
+        payment_id: "",
+        order_items: cart.map((item) => ({
+          product_id: item.product.id,
+          product_name: item.product.name,
+          quantity: item.quantity,
+          unit_price: item.product.price,
+        })),
+      };
+
+
+      const orderResponse = await handleCreateOrder(orderDetails);
+      if (!orderResponse.order_id) {
+        console.error("Failed to create order.");
+        return;
+      }
+
+      console.log("Order created successfully:", orderResponse);
 
       try {
-        await handleStripeHosted(lineItems, customerDataForStripe);
+        const stripeSession = await handleStripeHosted(lineItems, customerDataForStripe);
+        const updateOrder = {
+          payment_status: "Unpaid",
+          order_status: "Pending",
+          payment_id: stripeSession.sessionId,
+        }
+        if (stripeSession?.sessionId) {
+          await handleUpdateOrder(orderResponse.order_id, updateOrder);
+        }
+
       } catch (err) {
         console.error("Error creating Stripe session:", err);
-      }
+      };
     }
   };
 

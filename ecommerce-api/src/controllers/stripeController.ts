@@ -24,7 +24,7 @@ export const createStripeHosted = async (req: Request, res: Response) => {
             },
             line_items: line_items.map((item: any) => ({
                 price_data: {
-                    currency: "SEK",
+                    currency: "USD",
                     product_data: {
                         name: item.price_data.product_data.name,
                         description: item.price_data.product_data.description,
@@ -41,7 +41,10 @@ export const createStripeHosted = async (req: Request, res: Response) => {
             success_url: "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url: "http://localhost:5173/cart",
         });
-        res.json({ checkout_url: session.url });
+        res.json({ 
+            checkout_url: session.url,
+            sessionId: session.id, 
+        });
     } catch (error) {
         console.error("Error creating checkout session: ", error);
         res.status(500).json({ error: "Could not create Stripe checkout session", details: error.message });

@@ -217,71 +217,71 @@ const OrderForm = ({ onClose, editingOrder, refreshOrders }: OrderFormProps) => 
         </div>
 
         <div className={classes.productSection}>
-        <h4>Order Items</h4>
-        {formData.order_items.map((item, index) => (
-          <div key={index} className={classes.productItem}>
-            <div className={classes.formGroup}>
-              <label>Product</label>
-              <select 
-                name="product_id" 
-                value={item.product_id || ""} 
-                onChange={(e) => {
-                  handleProductChange(index, e); 
-                  handleProductSelect(index, Number(e.target.value)); 
-                }} 
-                required
-                disabled={editingOrder ? true : false} 
-              >
-                <option value="" disabled>Select a product</option>
-                {products.map((product) => (
-                  <option key={product.id} value={product.id}>{product.name}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div className={classes.formGroup}>
-              <label>Quantity</label>
-              <input 
-                type="number" 
-                name="quantity" 
-                value={item.quantity} 
-                onChange={(e) => {
-                  handleProductChange(index, e); 
-                  handleQuantityChange(index, Number(e.target.value)); 
-                }} 
-                required 
-              />
-            </div>
-            
-            <div className={classes.formGroup}>
-              <label>Unit Price</label>
-              <input 
-                type="number" 
-                name="unit_price" 
-                value={item.unit_price} 
-                disabled 
-              />
-            </div>
+          <h4>Order Items</h4>
+          {formData.order_items.map((item, index) => (
+            <div key={index} className={classes.productItem}>
+              <div className={classes.formGroup}>
+                <label>Product</label>
+                <select 
+                  name="product_id" 
+                  value={item.product_id || ""} 
+                  onChange={(e) => {
+                    handleProductChange(index, e); 
+                    handleProductSelect(index, Number(e.target.value)); 
+                  }} 
+                  required
+                  disabled={editingOrder ? true : false} 
+                >
+                  <option value="" disabled>Select a product</option>
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>{product.name}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className={classes.formGroup}>
+                <label>Quantity</label>
+                <input 
+                  type="number" 
+                  name="quantity" 
+                  value={item.quantity} 
+                  onChange={(e) => {
+                    handleProductChange(index, e); 
+                    handleQuantityChange(index, Number(e.target.value)); 
+                  }} 
+                  required 
+                />
+              </div>
+              
+              <div className={classes.formGroup}>
+                <label>Unit Price</label>
+                <input 
+                  type="number" 
+                  name="unit_price" 
+                  value={item.unit_price} 
+                  disabled 
+                />
+              </div>
 
+              <button 
+                type="button" 
+                className={`${classes.removeButton}`} 
+                onClick={() => handleDeleteItem(item.id)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          
+          {!editingOrder && (
             <button 
+              className={`${classes.addProductButton}`} 
               type="button" 
-              className={`${classes.removeButton}`} 
-              onClick={() => handleDeleteItem(item.id)}
+              onClick={handleAddProduct}
             >
-              Remove
+              Add Product
             </button>
-          </div>
-        ))}
-        
-        {!editingOrder && (
-          <button 
-            className={`${classes.addProductButton}`} 
-            type="button" 
-            onClick={handleAddProduct}
-          >
-            Add Product
-          </button>
-        )}
+          )}
       </div>
 
         {error && <p className={classes.error}>{error}</p>}

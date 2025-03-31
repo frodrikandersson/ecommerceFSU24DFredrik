@@ -21,9 +21,20 @@ export async function getOneOrder({ id }: { id: number }): Promise<IOrder> {
     }
 }
 
+export async function getOrderByPaymentId({ paymentId }: { paymentId: string }) {
+    try {
+        const response = await api.get(`/orders/payment/${paymentId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to get the order by payment ID.");
+        throw new Error("Order fetch by payment ID failed.");
+    }
+}
+
 export async function createOrder(orderData: Omit<IOrder, "id" | "created_at">) {
     try {
         const response = await api.post("/orders", orderData);
+        console.log("Order created successfully:", orderData);
         return response.data;
     } catch (error) {
         console.error("Failed to create an order.", error);

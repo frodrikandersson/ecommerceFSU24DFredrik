@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createOrder, updateOrder, deleteOrder, getOrders, getOneOrder } from '../services/ordersService';
+import { createOrder, updateOrder, deleteOrder, getOrders, getOneOrder, getOrderByPaymentId } from '../services/ordersService';
 import { IOrder } from '../models/IOrder';
 
 export const useOrder = () => {
@@ -55,7 +55,19 @@ export const useOrder = () => {
       setLoading(false);
       setError("Error fetching data for one order");
     }
-  }
+  };
+
+  const handleShowOneOrderByPaymentId = async (paymentId: string) => {
+    try {
+      setLoading(true);
+      const result = await getOrderByPaymentId({ paymentId });
+      setLoading(false);
+      return result;
+    } catch (err) {
+      setLoading(false);
+      setError("Error fetching data for one order by payment ID");
+    }
+  };
 
   const handleShowOrders = async () => {
     try {
@@ -74,6 +86,7 @@ export const useOrder = () => {
     handleUpdateOrder,
     handleDeleteOrder,
     handleShowOneOrder,
+    handleShowOneOrderByPaymentId,
     handleShowOrders,
     loading,
     error,
